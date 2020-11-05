@@ -5,6 +5,7 @@ const { default: shopifyAuth } = require('@shopify/koa-shopify-auth');
 const dotenv = require('dotenv');
 const { verifyRequest } = require('@shopify/koa-shopify-auth');  
 const session = require('koa-session');
+const Router = require('koa-router');
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
 
 app.prepare().then(() => {
   const server = new Koa();
+  const router = new Router();
   server.use(session({ sameSite: 'none', secure: true }, server));
   server.keys = [SHOPIFY_API_SECRET_KEY];
 
@@ -44,13 +46,34 @@ app.prepare().then(() => {
     }),
   );
 
-  server.use(verifyRequest());
-  server.use(async (ctx) => {
+  // instead of adding verifyRequest middleware for each route, use it for the route it is necessary
+  
+  // server.use(verifyRequest());
+  // server.use(async (ctx) => {
+  //   await handle(ctx.req, ctx.res);
+  //   ctx.respond = false;
+  //   ctx.res.statusCode = 200;
+
+  // });
+
+
+  // adding verifyRequest middleware for /merch route 
+  router.get('/merch', verifyRequest(), async (ctx) => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
-
   });
+
+  // for every other route don't use verifyRequest middleware or use any other middleware you create
+  router.get('(.*)', async (ctx) => {
+    await handle(ctx.req, ctx.res);
+    // ctx.respond = false;
+    ctx.res.statusCode = 200;
+  });
+
+  // letting the server know that we want to use koa-router's routes
+  server.use(router.allowedMethods());
+  server.use(router.routes());
 
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
