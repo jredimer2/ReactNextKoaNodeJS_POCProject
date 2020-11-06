@@ -41,7 +41,7 @@ app.prepare().then(() => {
         }
 
         )
-        ctx.redirect('/');
+        ctx.redirect('/merch-landing');
       },
     }),
   );
@@ -59,6 +59,12 @@ app.prepare().then(() => {
 
   // adding verifyRequest middleware for /merch route 
   router.get('/merch', verifyRequest(), async (ctx) => {
+    await handle(ctx.req, ctx.res);
+    ctx.respond = false;
+    ctx.res.statusCode = 200;
+  });
+  
+  router.get('/merch-landing', verifyRequest(), async (ctx) => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
