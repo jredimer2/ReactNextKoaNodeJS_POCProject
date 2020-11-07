@@ -57,11 +57,9 @@ app.prepare().then(() => {
   // });
 
 
-  // adding verifyRequest middleware for /merch route 
+  // merch page is missing; either you can add the merch.js page or just redirect to existing merch-landing page
   router.get('/merch', verifyRequest(), async (ctx) => {
-    await handle(ctx.req, ctx.res);
-    ctx.respond = false;
-    ctx.res.statusCode = 200;
+    ctx.redirect('/merch-landing');
   });
   
   router.get('/merch-landing', verifyRequest(), async (ctx) => {
