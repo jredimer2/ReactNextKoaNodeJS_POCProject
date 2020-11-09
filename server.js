@@ -41,7 +41,7 @@ app.prepare().then(() => {
         }
 
         )
-        ctx.redirect('/merch-landing');
+        ctx.redirect('/merch');
       },
     }),
   );
