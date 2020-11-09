@@ -23,13 +23,14 @@ class MyApp extends App {
                 </Head>
                 {
                     config.shopOrigin ?
-                    <Provider config={config}>
-                        <AppProvider i18n={translations}>
-                            <Component {...pageProps} />
-                        </AppProvider>
-                    </Provider>
-                    :
-                    <Component {...pageProps} />
+                        <Provider config={config}>
+                            <AppProvider i18n={translations}>
+                                <Component {...pageProps} />
+                            </AppProvider>
+                        </Provider>
+                        :
+                        <Component {...pageProps} />
+
                 }
             </React.Fragment>
         );
