@@ -11,11 +11,14 @@ export default function userDetails() {
 
     const route = useRouter();
 
+    const userId = parseInt(route.query.id);
+    const user = test[userId] || {};
+
     return (
         <Page
             breadcrumbs={[{ content: 'Home', url: '/' }]}            
-            title={"User " + test[parseInt(route.query.id)].name}
-            subtitle={"id = " + route.query.id}
+            title={"User " + user.name}
+            subtitle={"id = " + userId}
 
             primaryAction={{ content: 'Save', disabled: true }}
             secondaryActions={[
@@ -53,7 +56,7 @@ export default function userDetails() {
                 <Layout.Section>
                     <Card sectioned>
                         <ul>
-                            <li>{"User " + test[parseInt(route.query.id)].name}</li>
+                            <li>{"User " + user.name}</li>
                             <li>Email</li>
                         </ul>
                     </Card>
@@ -68,5 +71,21 @@ export default function userDetails() {
         </Page>
 
     )
+}
+
+
+// getInitialProps will run before it page gets rendered
+userDetails.getInitialProps = async (ctx, data) => {
+    // you can add additional data to pageData
+    let pageData = {};
+    
+    if(!data.shopOrigin) {
+        if(typeof window !== "undefined") {
+            window.location.href = "/test";
+        } else {
+            ctx.res.writeHead(302, { Location: '/test' })
+        }
+    }
+    return { ...pageData }
 }
 
