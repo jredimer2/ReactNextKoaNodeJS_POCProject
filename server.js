@@ -34,6 +34,7 @@ app.prepare().then(() => {
       ],
       afterAuth(ctx) {
         const { shop, accessToken } = ctx.session;
+        console.log(`afterAuth:start`);
         ctx.cookies.set('shopOrigin', shop, {
           httpOnly: false,
           secure: true,
@@ -57,9 +58,11 @@ app.prepare().then(() => {
   // });
 
 
-  // merch page is missing; either you can add the merch.js page or just redirect to existing merch-landing page
+  // adding verifyRequest middleware for /merch route 
   router.get('/merch', verifyRequest(), async (ctx) => {
-    ctx.redirect('/merch-landing');
+    await handle(ctx.req, ctx.res);
+    ctx.respond = false;
+    ctx.res.statusCode = 200;
   });
   
   router.get('/merch-landing', verifyRequest(), async (ctx) => {
