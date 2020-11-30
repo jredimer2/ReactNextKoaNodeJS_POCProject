@@ -23,13 +23,24 @@ function Test(props) {
 
 // This is to query Merchants list
 Test.getInitialProps = async function () {
+  let merchants = {};
+  let users = {};
+  
   // step1: get merchants
-  const res1 = await fetch(`http://localhost:3001/merchants`)
-  const merchants = await res1.json()
+  try {
+    const res1 = await fetch(`http://localhost:3001/merchants`)
+    merchants = await res1.json()
+  } catch(err) {
+    console.error(err);
+  }
 
   // step2: get users
-  const res2 = await fetch(`http://localhost:3001/users`)
-  const users = await res2.json()
+  try {
+    const res2 = await fetch(`http://localhost:3001/users`)
+    users = await res2.json()
+  } catch(err) {
+    console.error(err);
+  }
 
   // step3: return them both together and in Test function destructure them
   return { merchants, users }
