@@ -9,7 +9,7 @@ export default function Users(props) {
     rows: []
   };
 
-  var newRows = props.jsonResponse.data.map((row) => {
+  var newRows = props.jsonResponse.map((row) => {
     formatted.rows.push([
       row.firstname,
       row.lastname

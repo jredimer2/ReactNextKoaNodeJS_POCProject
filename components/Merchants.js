@@ -9,7 +9,9 @@ export default function Merchants(props) {
     rows: []
   };
 
-  var newRows = props.jsonResponse.data.map((row) => {
+  console.log("$$ props = ", props)
+
+  var newRows = props.jsonResponse.map((row) => {
     formatted.rows.push([
       row.firstname,
       row.lastname

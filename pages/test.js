@@ -8,6 +8,8 @@ function Test(props) {
   // step4: destructure merchants and users and pass them to Merchants and Users Components
   const { merchants, users } = props;
 
+  console.log('>> merchants = ', merchants)
+
   return (
     <Page title="Multiple queries to a page">
       <Card>
