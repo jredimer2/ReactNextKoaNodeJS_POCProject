@@ -12,7 +12,8 @@ export default function Users(props) {
   var newRows = props.jsonResponse.map((row) => {
     formatted.rows.push([
       row.firstname,
-      row.lastname
+      row.lastname,
+      row.merchant_id
     ])
   })
 
@@ -30,11 +31,13 @@ export default function Users(props) {
         <DataTable
           columnContentTypes={[
             'text',
+            'text',
             'text'
           ]}
           headings={[
             'First Name',
-            'Last Name'
+            'Last Name',
+            'Merch Id'
           ]}
           rows={rows}
           totals={['', '', '']}
