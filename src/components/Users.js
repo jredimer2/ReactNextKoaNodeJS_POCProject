@@ -1,5 +1,6 @@
 import React, { useState, useCallback, Component } from 'react';
-import { Page, Link, Card, DataTable } from '@shopify/polaris';
+import { Page, Link, Card, DataTable, Button } from '@shopify/polaris';
+import testAuthenticate from 'redux/testAuthenticate'
 
 export default function Users(props) {
 
@@ -27,6 +28,12 @@ export default function Users(props) {
     <Page title="Users List">
       <h1>{props.greeting}</h1>
 
+      <Button onClick={() => {
+        console.log('BUTTON CLICKED')
+        testAuthenticate()
+      }
+      }>Create cookie</Button>
+
       <Card>
         <DataTable
           columnContentTypes={[
@@ -41,7 +48,7 @@ export default function Users(props) {
           ]}
           rows={rows}
           totals={['', '', '']}
-          sortable={[false, false, true ]}
+          sortable={[false, false, true]}
           defaultSortDirection="descending"
           initialSortColumnIndex={4}
           onSort={handleSort}

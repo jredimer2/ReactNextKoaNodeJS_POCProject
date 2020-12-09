@@ -3,6 +3,8 @@ import { Page, Card } from '@shopify/polaris';
 import Merchants from 'components/Merchants'
 import Users from 'components/Users'
 import config from 'config'
+import cookies from 'cookieUtils'
+
 
 function Test(props) {
 
@@ -11,18 +13,22 @@ function Test(props) {
 
   console.log('>>>>>> USERS = ', users)
 
+  //console.log("Calling cookies.getCookie from browser ..........")
+  //const tkn = cookies.getCookie('token', '')
+  //console.log('>>>>>>>>>>>>> Stored token in Browser = ', tkn)
+  
+
   return (
     <Page title="Multiple queries to a page">
       <Card>
         <Users jsonResponse={users} />
       </Card>
     </Page>
-
   )
 }
 
 // This is to query Merchants list
-Test.getInitialProps = async function () {
+Test.getInitialProps = async function (ctx) {
   let merchants = {};
   let users = {};
 
@@ -37,7 +43,7 @@ Test.getInitialProps = async function () {
 */
   // step2: get users
   try {
-    const tokenRes = await fetch(`${config.dbrootport}/login`, { method: 'POST' })  
+    const tokenRes = await fetch(`${config.dbrootport}/login`, { method: 'POST' })
     const tokenJson = await tokenRes.json()
 
     // token a
@@ -47,6 +53,12 @@ Test.getInitialProps = async function () {
     //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImpvZSIsImVtYWlsIjoiam9lQGdtYWlsLmNvbSIsIm1lcmNoX2lkIjoiMGM2ZjQ4YjctN2Q0Yi00NGNhLWJmOTQtNTg4YzU4OGVlMzBiIn0sImlhdCI6MTYwNzMxNjU2NX0.fUKPTs0uO1XqHjEnYl6hXoIc7AYl49DNKi-wl8Ui0Ls'
 
     console.log(">>>>>>>>>>>> TOKEN = ", tokenJson.token)
+
+    //console.log(">>>>>> COOKIE = ", ctx.request.headers.cookies)
+
+    //setCookie('token', '12345');
+    cookies.setCookie('token', tokenJson.token)
+   
     const res2 = await fetch(`${config.dbrootport}/users/?merch_id=${config.merch_id}`, {
       headers: {
         'Authorization': `Bearer ${tokenJson.token}`
