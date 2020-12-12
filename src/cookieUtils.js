@@ -4,16 +4,12 @@
 const cookie = require('js-cookie');
 
 exports.setCookie = (key, value) => {
-  console.log(" setCookie : TP-1")
   if (process.browser) {
-    console.log(" setCookie : TP-2")
     cookie.set(key, value, {
       expires: 1,
       path: '/'
     });
-    console.log(" setCookie : TP-3")
   }
-  console.log(" setCookie : TP-4")
 };
 
 exports.removeCookie = (key) => {

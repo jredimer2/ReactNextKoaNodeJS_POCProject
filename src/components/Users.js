@@ -3,6 +3,7 @@ import { Page, Link, Card, DataTable, Button } from '@shopify/polaris';
 import testAuthenticate from 'redux/testAuthenticate'
 
 export default function Users(props) {
+//class Users extends Component {
 
   const [sortedRows, setSortedRows] = useState(null);
 

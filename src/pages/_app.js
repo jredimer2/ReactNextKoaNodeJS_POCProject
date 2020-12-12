@@ -7,6 +7,9 @@ import Cookies from "js-cookie";
 import '@shopify/polaris/dist/styles.css';
 import translations from '@shopify/polaris/locales/en.json';
 
+//import { Provider } from 'react-redux';
+
+
 
 const parseCookie = str =>
   str

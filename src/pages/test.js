@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Page, Card } from '@shopify/polaris';
 import Merchants from 'components/Merchants'
+import TestComponent from 'components/TestComponent'
+import TestComponentDetails from 'components/TestComponentDetails'
 import Users from 'components/Users'
 import config from 'config'
 import cookies from 'cookieUtils'
+import { Provider } from 'react-redux'
+import allReducers from 'reducers'
+import { createStore } from 'redux'
 
 
 function Test(props) {
@@ -11,19 +16,33 @@ function Test(props) {
   // step4: destructure merchants and users and pass them to Merchants and Users Components
   const { merchants, users } = props;
 
-  console.log('>>>>>> USERS = ', users)
+  //console.log('>>>>>> USERS = ', users)
 
   //console.log("Calling cookies.getCookie from browser ..........")
   //const tkn = cookies.getCookie('token', '')
   //console.log('>>>>>>>>>>>>> Stored token in Browser = ', tkn)
-  
+
+  const store = createStore(allReducers)
+
 
   return (
+    /*
     <Page title="Multiple queries to a page">
       <Card>
         <Users jsonResponse={users} />
       </Card>
     </Page>
+    */
+    <Provider store={store}>
+      <Page title="Testing REDUX">
+        <Card title="Users">
+          <TestComponent />
+        </Card>
+        <Card title="Details">
+          <TestComponentDetails />
+        </Card>
+      </Page>
+    </Provider>
   )
 }
 
@@ -58,14 +77,14 @@ Test.getInitialProps = async function (ctx) {
 
     //setCookie('token', '12345');
     cookies.setCookie('token', tokenJson.token)
-   
+
     const res2 = await fetch(`${config.dbrootport}/users/?merch_id=${config.merch_id}`, {
       headers: {
         'Authorization': `Bearer ${tokenJson.token}`
       }
     })
 
-    console.log(">>>>>>>>>>>> RES2 = ", res2)
+    //console.log(">>>>>>>>>>>> RES2 = ", res2)
 
     users = await res2.json()
 
