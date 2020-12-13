@@ -1,6 +1,7 @@
 import React, { useState, useCallback, Component } from 'react';
 import { Page, Link, Card, DataTable, Button } from '@shopify/polaris';
-import testAuthenticate from 'redux/testAuthenticate'
+import testAuthenticator from 'components/TestAuthenticator'
+import AuthenticateButton from 'components/AuthenticateButton'
 
 export default function Users(props) {
 //class Users extends Component {
@@ -26,14 +27,14 @@ export default function Users(props) {
   );
 
   return (
-    <Page title="Users List">
+    <Page title="Users 2 List">
       <h1>{props.greeting}</h1>
 
-      <Button onClick={() => {
-        console.log('BUTTON CLICKED')
-        testAuthenticate()
+      <AuthenticateButton onClick={() => {
+        console.log('>>>>> AuthenticateButton button clicked ')
+        //testAuthenticator()
       }
-      }>Create cookie</Button>
+      }>Create cookie</AuthenticateButton>
 
       <Card>
         <DataTable
@@ -67,6 +68,5 @@ export default function Users(props) {
       return direction === 'descending' ? amountB - amountA : amountA - amountB;
     });
   }
-
 
 }

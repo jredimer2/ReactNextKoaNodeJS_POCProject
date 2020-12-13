@@ -3,12 +3,16 @@ import { Page, Card } from '@shopify/polaris';
 import Merchants from 'components/Merchants'
 import TestComponent from 'components/TestComponent'
 import TestComponentDetails from 'components/TestComponentDetails'
+import AuthenticateButton from 'components/AuthenticateButton'
 import Users from 'components/Users'
 import config from 'config'
 import cookies from 'cookieUtils'
 import { Provider } from 'react-redux'
 import allReducers from 'reducers'
 import { createStore } from 'redux'
+import { getToken } from 'getToken'
+import axios from 'axios'
+
 
 
 function Test(props) {
@@ -24,6 +28,9 @@ function Test(props) {
 
   const store = createStore(allReducers)
 
+  console.log(">>> Received users = ", users)
+
+
 
   return (
     /*
@@ -35,6 +42,9 @@ function Test(props) {
     */
     <Provider store={store}>
       <Page title="Testing REDUX">
+        <Card title="Users from Database">
+          <Users jsonResponse={users} />
+        </Card>
         <Card title="Users">
           <TestComponent />
         </Card>
@@ -50,6 +60,7 @@ function Test(props) {
 Test.getInitialProps = async function (ctx) {
   let merchants = {};
   let users = {};
+  let responseUsers;
 
   // step1: get merchants
   /*
@@ -62,37 +73,43 @@ Test.getInitialProps = async function (ctx) {
 */
   // step2: get users
   try {
-    const tokenRes = await fetch(`${config.dbrootport}/login`, { method: 'POST' })
-    const tokenJson = await tokenRes.json()
+    //const tokenRes = await fetch(`${config.dbrootport}/login`, { method: 'POST' })
+    //const tokenJson = await tokenRes.json()
 
-    // token a
-    //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImpvZSIsImVtYWlsIjoiam9lQGdtYWlsLmNvbSIsIm1lcmNoX2lkIjoiMGM2ZjQ4YjctN2Q0Yi00NGNhLWJmOTQtNTg4YzU4OGVlMzBhIn0sImlhdCI6MTYwNzMxMzI3OH0.0eLE2eybZ9yCE2NKq7at3CqrOyslB-C-pcTfDOcmkLU'
+    //console.log("%%%%%%% TOKEN = ", tokenJson.token)
+    //console.log("$$$$$$ Fetched token from getInitialProps() = ", getToken(ctx))
 
-    // token b
-    //const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImpvZSIsImVtYWlsIjoiam9lQGdtYWlsLmNvbSIsIm1lcmNoX2lkIjoiMGM2ZjQ4YjctN2Q0Yi00NGNhLWJmOTQtNTg4YzU4OGVlMzBiIn0sImlhdCI6MTYwNzMxNjU2NX0.fUKPTs0uO1XqHjEnYl6hXoIc7AYl49DNKi-wl8Ui0Ls'
+    //cookies.setCookie('token', tokenJson.token)
 
-    console.log(">>>>>>>>>>>> TOKEN = ", tokenJson.token)
-
-    //console.log(">>>>>> COOKIE = ", ctx.request.headers.cookies)
-
-    //setCookie('token', '12345');
-    cookies.setCookie('token', tokenJson.token)
-
-    const res2 = await fetch(`${config.dbrootport}/users/?merch_id=${config.merch_id}`, {
+    /*
+    const res2 = await fetch(`${config.dbrootport}/users?merch_id=${config.merch_id}`, {
       headers: {
         'Authorization': `Bearer ${tokenJson.token}`
       }
     })
 
-    //console.log(">>>>>>>>>>>> RES2 = ", res2)
-
     users = await res2.json()
+*/
 
+    const token = getToken(ctx)
+    console.log("***** TOKEN = ", token)
+
+    responseUsers = await axios.get(`${config.dbrootport}/users?merch_id=${config.merch_id}`, {
+      headers: {
+        'Authorization': `Bearer ${getToken(ctx)}`
+      }
+    }
+    )
+    
   } catch (err) {
     console.error(err);
   }
 
-  // step3: return them both together and in Test function destructure them
+  if (responseUsers != undefined) { users = responseUsers.data }
+
+
+  console.log(">> >> >> Users = ", users)
+
   return { merchants, users }
 }
 
