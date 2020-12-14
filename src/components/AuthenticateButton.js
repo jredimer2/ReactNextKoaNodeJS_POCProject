@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { Page, Link, Card, DataTable, Button } from '@shopify/polaris';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import selectUserActionCreator from 'actions'
-import testAuthenticator from './TestAuthenticator'
+import actions from 'actions'
+import simAuthentication from './SimAuthentication'
+import { getToken } from 'getToken'
 
 class AuthenticateButton extends Component {
 
@@ -13,13 +14,25 @@ class AuthenticateButton extends Component {
             <div>
                 <Button onClick={() => {
                     console.log('>>>>> AuthenticateButton button clicked ')
-                    testAuthenticator()
+                    simAuthentication()
+                    this.props.updateUsersListActionCreator()
                 }
-                }>Create cookie</Button>
+                }>Get Token</Button>
             </div>
         )
         
     }
 }
 
-export default AuthenticateButton
+function mapStateToProps(state) {
+
+    return {
+        updatedUsers: state.updatedUsers
+    }
+}
+
+function matchDispatchToProps(dispatch) {
+    return bindActionCreators({ updateUsersListActionCreator: actions.updateUsersListActionCreator }, dispatch)
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(AuthenticateButton)

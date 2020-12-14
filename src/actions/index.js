@@ -1,9 +1,16 @@
-const selectUserActionCreator = (user) => {
-    console.log("You clicked on ", user.fname)
-    return {
-        type: 'USER-SELECTED',
-        payload: user
-    }
+import selectUserActionCreator from './selectUserActionCreator'
+import testButtonActionCreator from './testButtonActionCreator'
+import updateUsersListActionCreator from './updateUsersListActionCreator'
+
+
+export default {
+  selectUserActionCreator,
+  testButtonActionCreator,
+  updateUsersListActionCreator
 }
 
-export default selectUserActionCreator
+/*
+export default {
+    data: "Actions Data Structure"
+}
+*/

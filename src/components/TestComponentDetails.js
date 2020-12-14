@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import selectUserActionCreator from 'actions'
+import selectUserActionCreator from 'actions/selectUserActionCreator'
 
 
 class TestComponentDetails extends Component {

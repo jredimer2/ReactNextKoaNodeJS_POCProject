@@ -1,43 +1,56 @@
-import React, { Component } from 'react'
+import React, { useState, Component } from 'react';
+import { Page, Card, Button } from '@shopify/polaris';
+import Merchants from 'components/Merchants'
+import TestComponentDetails from 'components/TestComponentDetails'
+import AuthenticateButton from 'components/AuthenticateButton'
+import Users from 'components/Users'
+import config from 'config'
+import cookies from 'cookieUtils'
+import { Provider } from 'react-redux'
+import allReducers from 'reducers'
+import { createStore } from 'redux'
+import { getToken } from 'getToken'
+import axios from 'axios'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import selectUserActionCreator from 'actions'
+import MenuBar from 'components/MenuBar'
+import TestLabel from 'components/TestLabel'
+import TestButton from 'components/TestButton'
+import actions from 'actions'
 
 
 class TestComponent extends Component {
 
-    createItemsList() {
-        return this.props.users.map(user => {
-            return (
-                <li
-                    key={user.id}
-                    onClick={() => this.props.selectUserAction(user)}
-                >
-                    {user.fname} {user.lname}
-                </li>
-            )
-        })
-    }
     render() {
         return (
             <div>
-                <ul>
-                    {this.createItemsList()}
-                </ul>
+                <Page title="Testing REDUX">
+                    <Card title="Menu bar">
+                        <AuthenticateButton />
+                        <TestButton />
+                        <TestLabel></TestLabel>
+                    </Card>
+                    <Card title="Users">
+                        <Users />
+                    </Card>
+                    <Card title="Details">
+                        <TestComponentDetails />
+                    </Card>
+                </Page>
             </div>
         )
     }
 }
 
-function mapStateToProps(state) {
 
+function mapStateToProps(state) {
     return {
-        users: state.users
+        updatedUsers: state.updateUsersListActionCreator
     }
 }
 
 function matchDispatchToProps(dispatch) {
-    return bindActionCreators({ selectUserAction: selectUserActionCreator }, dispatch)
+    return bindActionCreators({ updateUsersListActionCreator: actions.updateUsersListActionCreator }, dispatch)
 }
 
 export default connect(mapStateToProps, matchDispatchToProps)(TestComponent)

@@ -1,7 +1,8 @@
 //const cookie = require('js-cookie');
 const { getCookie } = require('./cookieUtils')
 
-exports.getToken = (ctx) => {
+// Setting the default ctx to null allows this function to be called from anywhere 
+exports.getToken = (ctx=null) => {
     //console.log(">>>>> CTX.REQ.HEADERS = ", ctx.req.headers)
 
   if (process.browser) {
