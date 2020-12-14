@@ -7,6 +7,9 @@ import Cookies from "js-cookie";
 import '@shopify/polaris/dist/styles.css';
 import translations from '@shopify/polaris/locales/en.json';
 
+//import { Provider } from 'react-redux';
+
+
 
 const parseCookie = str =>
   str
@@ -23,6 +26,7 @@ class MyApp extends App {
         console.log('getInitialProps:start');
         let shopOrigin;
         try {
+            console.log(">>>>>>>>>>>> COOKIE = ", ctx.req.headers.cookie)
             shopOrigin = parseCookie(ctx.req.headers.cookie).shopOrigin;
         } catch (e) {
             if(typeof window !== "undefined") {
