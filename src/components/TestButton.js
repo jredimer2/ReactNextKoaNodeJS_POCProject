@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 import { Page, Link, Card, DataTable, Button } from '@shopify/polaris';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import testButtonActionCreator from 'actions/testButtonActionCreator'
-import actions from 'actions'
 
 class TestButton extends Component {
 
@@ -28,15 +24,4 @@ class TestButton extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        label: state.label
-    }
-}
-
-function matchDispatchToProps(dispatch) {
-    console.log(">>>>>>>> TestButton.matchDispatchToProps actions = ", actions)
-    return bindActionCreators({ testButtonAction: actions.testButtonActionCreator }, dispatch)
-}
-
-export default connect(mapStateToProps, matchDispatchToProps)(TestButton)
+export default TestButton;

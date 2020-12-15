@@ -7,6 +7,9 @@ import Cookies from "js-cookie";
 import '@shopify/polaris/dist/styles.css';
 import translations from '@shopify/polaris/locales/en.json';
 
+// Step 2: include the default export of ExampleContextProvider and wrap it around the component
+import ExampleContextProvider from '../contexts/ExampleContext';
+
 //import { Provider } from 'react-redux';
 
 
@@ -59,6 +62,7 @@ class MyApp extends App {
         console.log(config)
 
         return (
+            <ExampleContextProvider>
             <React.Fragment>
                 <Head>
                     <title>Sample App</title>
@@ -67,7 +71,7 @@ class MyApp extends App {
                 {
                     config.shopOrigin ?
                         <Provider config={config}>
-                            <AppProvider i18n={translations}>
+                            <AppProvider i18n={translations}>                                
                                 <Component {...pageProps} />
                             </AppProvider>
                         </Provider>
@@ -78,6 +82,7 @@ class MyApp extends App {
 
                 }
             </React.Fragment>
+            </ExampleContextProvider>
         );
     }
 }
