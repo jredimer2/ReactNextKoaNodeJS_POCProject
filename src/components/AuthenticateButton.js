@@ -8,16 +8,23 @@ import { getToken } from 'getToken'
 
 class AuthenticateButton extends Component {
 
+    handleGetTokenBtnClick = async () => {
+        try {
+            console.log('>>>>> AuthenticateButton button clicked ')
+            await simAuthentication();
+            console.log('>>>> token received...');
+            this.props.updateUsersListActionCreator()
+        } catch(error) {
+            console.error(error);
+        }
+    }
+
     render() {
         
         return (
             <div>
-                <Button onClick={() => {
-                    console.log('>>>>> AuthenticateButton button clicked ')
-                    simAuthentication()
-                    this.props.updateUsersListActionCreator()
-                }
-                }>Get Token</Button>
+                <Button onClick={ this.handleGetTokenBtnClick }
+                >Get Token</Button>
             </div>
         )
         
