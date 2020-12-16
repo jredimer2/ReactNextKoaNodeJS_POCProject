@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import selectUserActionCreator from 'actions/selectUserActionCreator'
+// import { bindActionCreators } from 'redux'
+// import { connect } from 'react-redux'
+// import selectUserActionCreator from 'actions/selectUserActionCreator'
 
 
 class TestComponentDetails extends Component {
@@ -31,14 +31,16 @@ class TestComponentDetails extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        user: state.selectedUser
-    }
-}
+export default TestComponentDetails;
 
-function matchDispatchToProps(dispatch) {
-    return bindActionCreators({ selectUserAction: selectUserActionCreator }, dispatch)
-}
+// function mapStateToProps(state) {
+//     return {
+//         user: state.selectedUser
+//     }
+// }
 
-export default connect(mapStateToProps, matchDispatchToProps)(TestComponentDetails)
+// function matchDispatchToProps(dispatch) {
+//     return bindActionCreators({ selectUserAction: selectUserActionCreator }, dispatch)
+// }
+
+// export default connect(mapStateToProps, matchDispatchToProps)(TestComponentDetails)

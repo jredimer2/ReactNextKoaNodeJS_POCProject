@@ -1,19 +1,20 @@
 import React, { Component } from 'react'
 import { Page, Link, Card, DataTable, Button } from '@shopify/polaris';
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import actions from 'actions'
 import simAuthentication from './SimAuthentication'
 import { getToken } from 'getToken'
 
+import { ExampleContext } from '../contexts/ExampleContext';
+
 class AuthenticateButton extends Component {
+
+    static contextType = ExampleContext;
 
     handleGetTokenBtnClick = async () => {
         try {
             console.log('>>>>> AuthenticateButton button clicked ')
             await simAuthentication();
             console.log('>>>> token received...');
-            this.props.updateUsersListActionCreator()
+            this.context.getUsersList()
         } catch(error) {
             console.error(error);
         }
@@ -31,15 +32,4 @@ class AuthenticateButton extends Component {
     }
 }
 
-function mapStateToProps(state) {
-
-    return {
-        updatedUsers: state.updatedUsers
-    }
-}
-
-function matchDispatchToProps(dispatch) {
-    return bindActionCreators({ updateUsersListActionCreator: actions.updateUsersListActionCreator }, dispatch)
-}
-
-export default connect(mapStateToProps, matchDispatchToProps)(AuthenticateButton)
+export default AuthenticateButton;

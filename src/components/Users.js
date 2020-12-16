@@ -1,12 +1,14 @@
 import React, { useState, useCallback, Component } from 'react';
 import { Page, Link, Card, DataTable, Button } from '@shopify/polaris';
-import testAuthenticator from 'components/SimAuthentication'
-import AuthenticateButton from 'components/AuthenticateButton'
-import actions from 'actions'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+// import testAuthenticator from 'components/SimAuthentication'
+// import AuthenticateButton from 'components/AuthenticateButton'
+
+// step 3: use ExampleContext 
+import { ExampleContext } from '../contexts/ExampleContext';
 
 class Users extends Component {
+
+  static contextType = ExampleContext;
 
   //console.log('********** Users  this.props.updatedUsers =', props.updatedUsers)
 
@@ -68,14 +70,31 @@ class Users extends Component {
   */
   render() {
 
+    const { users } = this.context;
+
     return (
       <Page title="Users 2 List">
-        <h1>User list is empty</h1>
+        {
+          users && users.length ? 
+          users.map(user => {
+            return <div key={user.email}>
+              <p>Name: ${user.firstname} ${user.lastname}</p>
+              <p>Email: ${user.email}</p>
+              <p>Merchant ID: ${user.merchant_id}</p>
+              <hr />
+            </div>
+            
+          })
+          :
+          <h1>User list is empty</h1>
+        }
       </Page>
     )
 
   }
 }
+
+export default Users;
 
 //  return (
 
@@ -94,18 +113,3 @@ function sortCurrency(rows, index, direction) {
   });
 }
 */
-
-
-
-
-function mapStateToProps(state) {
-  return {
-    updatedUsers: state.updateUsersListActionCreator
-  }
-}
-
-function matchDispatchToProps(dispatch) {
-  return bindActionCreators({ updateUsersListActionCreator: actions.updateUsersListActionCreator }, dispatch)
-}
-
-export default connect(mapStateToProps, matchDispatchToProps)(Users)
