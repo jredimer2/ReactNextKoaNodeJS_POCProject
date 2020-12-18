@@ -14,6 +14,7 @@ export class ExampleContextProvider extends Component {
     };
 
     getUsersList = async () => {
+        console.log("getUsersList:start");
 
         const token = getToken(null)
         const responseUsers = await axios.get(`${config.dbrootport}/users?merch_id=${config.merch_id}`, {
