@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 // import { Page, Card, Button } from '@shopify/polaris';
 // import Merchants from 'components/Merchants'
 // import TestComponentDetails from 'components/TestComponentDetails'
@@ -13,13 +13,59 @@ import React, { useState } from 'react';
 // import TestLabel from 'components/TestLabel'
 // import TestButton from 'components/TestButton'
 import TestComponent from 'components/TestComponent'
+import { ExampleContext } from '../contexts/ExampleContext';
 
-export default function Test(props) {
+class Test extends Component {
 
-  // const store = createStore(allReducers)
+  state = {
+    token: '',
+    shopOrigin: '',
+    from_login_page: 'no'
+  }
 
-  return (
-      <TestComponent />
-  )
+  static contextType = ExampleContext;
+
+  componentDidMount() {
+
+    let { token, shopOrigin, from_login_page } = this.props;
+    this.setState({token, shopOrigin, from_login_page})
+
+    if(token) {
+      this.context.getUsersList();
+    } else if(shopOrigin) {
+      // need to get the merchant details first from the shopOrigin
+      // then get the same token for the merchant logged in from Shopify
+    }
+  }
+
+  // data is passed from getInitialProps of _app.js
+  static async getInitialProps(ctx, data) {
+    let auth = {};
+    console.log({data});
+    if(data && data.auth) {
+      auth = data.auth;
+    }
+
+    return auth;
+  }
+
+  render() {
+
+    const { token, shopOrigin, from_login_page } = this.state;
+
+    return (
+      <div>
+        <h1>
+        {
+          (token || shopOrigin) 
+          ? (from_login_page === "yes" ? "Logged in from Login page": "Logged in from Shopify") 
+          : "No logged in"
+        }
+        </h1>
+        <TestComponent />
+      </div>
+    )
+  }
 }
 
+export default Test

@@ -4,7 +4,7 @@ import { ResourcePicker } from '@shopify/app-bridge-react';
 import { Card } from '@shopify/polaris';
 import store from 'store-js';
 import Link from 'next/link';
-import Merchants from '../Merchants'
+// import Merchants from '../Merchants'
 
 function Merch() {
 

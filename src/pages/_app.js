@@ -9,6 +9,7 @@ import translations from '@shopify/polaris/locales/en.json';
 
 // Step 2: include the default export of ExampleContextProvider and wrap it around the component
 import ExampleContextProvider from '../contexts/ExampleContext';
+import simAuthentication from '../components/SimAuthentication'
 
 //import { Provider } from 'react-redux';
 
@@ -27,17 +28,34 @@ class MyApp extends App {
 
     static async getInitialProps({Component, ctx}) {
         console.log('getInitialProps:start');
-        let shopOrigin;
+        let shopOrigin, token, from_login_page, pathname;
         try {
+            pathname = ctx ? ctx.pathname: '';
             console.log(">>>>>>>>>>>> COOKIE = ", ctx.req.headers.cookie)
             shopOrigin = parseCookie(ctx.req.headers.cookie).shopOrigin;
+            token = parseCookie(ctx.req.headers.cookie).token;
+            from_login_page = parseCookie(ctx.req.headers.cookie).from_login_page;
         } catch (e) {
+            console.error({e})
             if(typeof window !== "undefined") {
+                pathname = window.location.pathname;
                 shopOrigin = Cookies.get("shopOrigin");
+                token = Cookies.get("token");
+                from_login_page = Cookies.get("from_login_page");
             }
         }
 
-        const shopifyProviderConfig = { apiKey: API_KEY, shopOrigin, forceRedirect: true };
+        // force redirect only if logged in from Shopify
+        let forceRedirect = true;
+        if(from_login_page && from_login_page === "yes") {
+            forceRedirect = false;
+        }
+
+        if(pathname === "/login") {
+            forceRedirect = false;
+        }
+
+        const shopifyProviderConfig = { apiKey: API_KEY, shopOrigin, token, from_login_page, forceRedirect: forceRedirect };
 
         let pageProps = {};
 
@@ -46,7 +64,12 @@ class MyApp extends App {
             pageProps = await Component.getInitialProps(ctx, {
                 // Pass any extra data to components's getInitalProps method here.
                 //  I'm using it like a global state provider here for values I do not want to retrieve again in Component's getInitalProps
-                shopOrigin: shopOrigin
+                shopOrigin: shopOrigin,
+                auth: {
+                    token: token,
+                    shopOrigin: shopOrigin,
+                    from_login_page: from_login_page
+                }
             });
 
             console.log('inside getInitialProps apps 2');

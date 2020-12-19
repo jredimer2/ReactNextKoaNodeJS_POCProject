@@ -12,7 +12,7 @@ class AuthenticateButton extends Component {
     handleGetTokenBtnClick = async () => {
         try {
             console.log('>>>>> AuthenticateButton button clicked ')
-            await simAuthentication();
+            await simAuthentication(true);
             console.log('>>>> token received...');
             this.context.getUsersList()
         } catch(error) {
