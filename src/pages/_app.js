@@ -55,7 +55,7 @@ class MyApp extends App {
             forceRedirect = false;
         }
 
-        const shopifyProviderConfig = { apiKey: API_KEY, shopOrigin, token, from_login_page, forceRedirect: forceRedirect };
+        const shopifyProviderConfig = { apiKey: API_KEY, shopOrigin, token, from_login_page, forceRedirect: false };
 
         let pageProps = {};
 
