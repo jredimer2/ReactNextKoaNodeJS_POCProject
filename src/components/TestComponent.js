@@ -19,7 +19,7 @@ class TestComponent extends Component {
     render() {
         return (
             <div>
-                <Page title="Testing REDUX">
+                <Page title="Testing REDUX 2">
                     <Card title="Menu bar">
                         <AuthenticateButton />
                         <TestButton />

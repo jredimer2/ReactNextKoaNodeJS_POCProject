@@ -8,6 +8,7 @@ const session = require('koa-session');
 const Router = require('koa-router');
 const axios = require('axios');
 
+
 dotenv.config();
 
 const port = parseInt(process.env.PORT, 10) || 3000;
@@ -17,6 +18,7 @@ const handle = app.getRequestHandler();
 
 const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
 
+console.log(">>>>>>>>>> START OF SERVER.JS")
 app.prepare().then(() => {
   const server = new Koa();
   const router = new Router();
@@ -45,7 +47,7 @@ app.prepare().then(() => {
         });
 
         try {
-          let response = await axios.post(`http://localhost:3001/login`);
+          let response = await axios.post(`${config.dbrootport}/login`);
           let token = response.data.token;
           
           ctx.cookies.set('token', token, {
@@ -57,13 +59,16 @@ app.prepare().then(() => {
           console.error({error});
         }
 
+        
         ctx.cookies.set('from_login_page', "no", {
           httpOnly: false,
           secure: true,
           sameSite: 'none'
         });
       
-        ctx.redirect('/merch');
+
+        //ctx.redirect('/merch');
+        ctx.redirect('/test');
       },
     }),
   );
@@ -78,6 +83,11 @@ app.prepare().then(() => {
 
   // });
 
+  router.get('/login-api', async (ctx) => {
+    let response = await axios.post(`http://localhost:3001/login`)
+    ctx.body = response.data;
+    console.log('>>>>>>>>>> RESPONSE = ', response)
+  });
 
   // adding verifyRequest middleware for /merch route 
   router.get('/merch', verifyRequest(), async (ctx) => {
