@@ -31,7 +31,9 @@ app.prepare().then(() => {
       scopes: ['read_products',
         'write_products',
         'read_script_tags',
-        'write_script_tags'
+        'write_script_tags',
+        'write_price_rules',
+        'write_discounts'
       ],
       async afterAuth(ctx) {
         // step1: save the access token and the shop
