@@ -24,6 +24,7 @@ export class ExampleContextProvider extends Component {
         }
         )
 
+        console.log('<<<<<<<<<<<<<<<<<< Context API RETURNED TOKEN =', getToken(null))
         // return responseUsers.data 
         this.setState({users: responseUsers.data})
     }

@@ -72,6 +72,8 @@ class Users extends Component {
 
     const { users } = this.context;
 
+    console.log('Users.js :: users = ', users)
+
     return (
       <Page title="Users 2 List">
         {

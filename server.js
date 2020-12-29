@@ -7,6 +7,7 @@ const { verifyRequest } = require('@shopify/koa-shopify-auth');
 const session = require('koa-session');
 const Router = require('koa-router');
 const axios = require('axios');
+const config = require('./src/config.js')
 
 
 dotenv.config();
@@ -41,7 +42,9 @@ app.prepare().then(() => {
         // step1: save the access token and the shop
         // step2: get the merchant token from the db server if username and email are present? 
         const { shop, accessToken } = ctx.session;
-        console.log(`afterAuth:start`);
+
+        console.log('>>>>>>> server.js  SHOPIFY ACCESS TOKEN =', accessToken)
+
         ctx.cookies.set('shopOrigin', shop, {
           httpOnly: false,
           secure: true,
@@ -49,14 +52,22 @@ app.prepare().then(() => {
         });
 
         try {
+          console.log('>>>>>>>>>> server.js TP-1')
           let response = await axios.post(`${config.dbrootport}/login`);
+          console.log('>>>>>>>>>> server.js TP-2')
           let token = response.data.token;
-          
+          console.log('>>>>>>>>>> server.js TP-3')
+
+          console.log('>>>>>>>>>> server.js DB-SERVER TOKEN =', token)
+          console.log('>>>>>>>>>> server.js TP-4')
+
           ctx.cookies.set('token', token, {
             httpOnly: false,
             secure: true,
             sameSite: 'none'
           });
+          console.log('>>>>>>>>>> server.js TP-5')
+
         } catch(error) {
           console.error({error});
         }
