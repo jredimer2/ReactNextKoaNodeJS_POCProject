@@ -73,3 +73,6 @@ dkms.conf
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.next/
+.next
+.env

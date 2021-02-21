@@ -5,6 +5,10 @@ const { default: shopifyAuth } = require('@shopify/koa-shopify-auth');
 const dotenv = require('dotenv');
 const { verifyRequest } = require('@shopify/koa-shopify-auth');  
 const session = require('koa-session');
+const Router = require('koa-router');
+const axios = require('axios');
+const config = require('./src/config.js')
+
 
 dotenv.config();
 
@@ -15,8 +19,10 @@ const handle = app.getRequestHandler();
 
 const { SHOPIFY_API_SECRET_KEY, SHOPIFY_API_KEY } = process.env;
 
+console.log(">>>>>>>>>> START OF SERVER.JS")
 app.prepare().then(() => {
   const server = new Koa();
+  const router = new Router();
   server.use(session({ sameSite: 'none', secure: true }, server));
   server.keys = [SHOPIFY_API_SECRET_KEY];
 
@@ -28,29 +34,105 @@ app.prepare().then(() => {
       scopes: ['read_products',
         'write_products',
         'read_script_tags',
-        'write_script_tags'
+        'write_script_tags',
+        'write_price_rules',
+        'write_discounts'
       ],
-      afterAuth(ctx) {
+      async afterAuth(ctx) {
+        // step1: save the access token and the shop
+        // step2: get the merchant token from the db server if username and email are present? 
         const { shop, accessToken } = ctx.session;
+
+        console.log('>>>>>>> server.js  SHOPIFY ACCESS TOKEN =', accessToken)
+
         ctx.cookies.set('shopOrigin', shop, {
           httpOnly: false,
           secure: true,
           sameSite: 'none'
+        });
+
+        try {
+          console.log('>>>>>>>>>> server.js TP-1')
+          let response = await axios.post(`${config.dbrootport}/login`);
+          console.log('>>>>>>>>>> server.js TP-2')
+          let token = response.data.token;
+          console.log('>>>>>>>>>> server.js TP-3')
+
+          console.log('>>>>>>>>>> server.js DB-SERVER TOKEN =', token)
+          console.log('>>>>>>>>>> server.js TP-4')
+
+          ctx.cookies.set('token', token, {
+            httpOnly: false,
+            secure: true,
+            sameSite: 'none'
+          });
+          console.log('>>>>>>>>>> server.js TP-5')
+
+        } catch(error) {
+          console.error({error});
         }
 
-        )
-        ctx.redirect('/');
+        
+        ctx.cookies.set('from_login_page', "no", {
+          httpOnly: false,
+          secure: true,
+          sameSite: 'none'
+        });
+      
+
+        //ctx.redirect('/merch');
+        ctx.redirect('/test');
       },
     }),
   );
 
-  server.use(verifyRequest());
-  server.use(async (ctx) => {
+  // instead of adding verifyRequest middleware for each route, use it for the route it is necessary
+  
+  // server.use(verifyRequest());
+  // server.use(async (ctx) => {
+  //   await handle(ctx.req, ctx.res);
+  //   ctx.respond = false;
+  //   ctx.res.statusCode = 200;
+
+  // });
+
+  router.get('/login-api', async (ctx) => {
+    let response = await axios.post(`${config.dbrootport}/login`)
+    ctx.body = response.data;
+    console.log('>>>>>>>>>> RESPONSE = ', response)
+  });
+
+  // adding verifyRequest middleware for /merch route 
+  
+  router.get('/merch', verifyRequest(), async (ctx) => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
-
   });
+  
+
+  router.get('/tmp', verifyRequest(), async (ctx) => {
+    await handle(ctx.req, ctx.res);
+    ctx.respond = false;
+    ctx.res.statusCode = 200;
+  });
+
+  router.get('/merch-landing', verifyRequest(), async (ctx) => {
+    await handle(ctx.req, ctx.res);
+    ctx.respond = false;
+    ctx.res.statusCode = 200;
+  });
+
+  // for every other route don't use verifyRequest middleware or use any other middleware you create
+  router.get('(.*)', async (ctx) => {
+    await handle(ctx.req, ctx.res);
+    // ctx.respond = false;
+    ctx.res.statusCode = 200;
+  });
+
+  // letting the server know that we want to use koa-router's routes
+  server.use(router.allowedMethods());
+  server.use(router.routes());
 
   server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
