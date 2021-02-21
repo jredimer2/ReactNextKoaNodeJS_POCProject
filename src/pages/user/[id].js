@@ -11,6 +11,7 @@ export default function userDetails() {
 
     const route = useRouter();
 
+    // jredimer 
     const userId = parseInt(route.query.id);
     const user = test[userId] || {};
 

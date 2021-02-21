@@ -97,18 +97,26 @@ app.prepare().then(() => {
   // });
 
   router.get('/login-api', async (ctx) => {
-    let response = await axios.post(`http://localhost:3001/login`)
+    let response = await axios.post(`${config.dbrootport}/login`)
     ctx.body = response.data;
     console.log('>>>>>>>>>> RESPONSE = ', response)
   });
 
   // adding verifyRequest middleware for /merch route 
+  
   router.get('/merch', verifyRequest(), async (ctx) => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
   });
   
+
+  router.get('/tmp', verifyRequest(), async (ctx) => {
+    await handle(ctx.req, ctx.res);
+    ctx.respond = false;
+    ctx.res.statusCode = 200;
+  });
+
   router.get('/merch-landing', verifyRequest(), async (ctx) => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;

@@ -27,11 +27,11 @@ const parseCookie = str =>
 class MyApp extends App {
 
     static async getInitialProps({Component, ctx}) {
-        console.log('getInitialProps:start');
+        console.log('>>> _app.js  TP-1 getInitialProps:start');
         let shopOrigin, token, from_login_page, pathname;
         try {
             pathname = ctx ? ctx.pathname: '';
-            console.log(">>>>>>>>>>>> COOKIE = ", ctx.req.headers.cookie)
+            console.log(">>>>>>>>>>>> _app.js  TP-2  COOKIE = ", ctx.req.headers.cookie)
             shopOrigin = parseCookie(ctx.req.headers.cookie).shopOrigin;
             token = parseCookie(ctx.req.headers.cookie).token;
             from_login_page = parseCookie(ctx.req.headers.cookie).from_login_page;
@@ -72,7 +72,7 @@ class MyApp extends App {
                 }
             });
 
-            console.log('inside getInitialProps apps 2');
+            console.log('>>> _apps.js  TP-3 inside getInitialProps apps 2');
         }
 
         return { shopifyProviderConfig, pageProps };
@@ -82,13 +82,13 @@ class MyApp extends App {
         const { Component, pageProps, shopifyProviderConfig } = this.props;
         const config = { ...shopifyProviderConfig };
 
-        console.log(config)
+        console.log('>>>>>> _app.js  TP-4  render()')
 
         return (
             <ExampleContextProvider>
             <React.Fragment>
                 <Head>
-                    <title>Sample App</title>
+                    <title>Next-React-Koa-Node</title>
                     <meta charSet="utf-8" />
                 </Head>
                 {
