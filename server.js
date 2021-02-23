@@ -4,6 +4,7 @@ const next = require('next');
 const { default: shopifyAuth } = require('@shopify/koa-shopify-auth');
 const dotenv = require('dotenv');
 const { verifyRequest } = require('@shopify/koa-shopify-auth');  
+const bodyParser = require('koa-bodyparser')
 const session = require('koa-session');
 const Router = require('koa-router');
 const axios = require('axios');
@@ -25,6 +26,8 @@ app.prepare().then(() => {
   const router = new Router();
   server.use(session({ sameSite: 'none', secure: true }, server));
   server.keys = [SHOPIFY_API_SECRET_KEY];
+
+  server.use(bodyParser({ enableTypes: ['json', 'text'] }))
 
   server.use(
     shopifyAuth({
@@ -78,6 +81,19 @@ app.prepare().then(() => {
           secure: true,
           sameSite: 'none'
         });
+
+        
+        // register app-uninstalled webhook here
+        try {
+          let response = await axios.post(`${config.dbrootport}/webhooks/register`, {
+            shop, 
+            access_token: accessToken
+          });
+
+          console.log(response);
+        } catch (error) {
+          console.error(error);
+        }
       
 
         //ctx.redirect('/merch');
@@ -121,6 +137,24 @@ app.prepare().then(() => {
     await handle(ctx.req, ctx.res);
     ctx.respond = false;
     ctx.res.statusCode = 200;
+  });
+
+  // when customers uninstalls the app, this endpoint will be called by Shopify
+  // the same endpoint was registered by the db server when customer installed the app
+  router.post('/webhooks/app-uninstalled', async (ctx) => {
+    // call backend api to notify that the app has been uninstalled
+    console.log('/webhooks/app-uninstalled');
+    console.log(ctx.request.body); // webhook body
+    
+    const shop = ctx.req.headers['x-shopify-shop-domain'];
+
+    try {
+      let response = await axios.post(`${config.dbrootport}/webhooks/app-uninstalled`, {shop: shop});
+      console.log({response});
+    } catch (error) {
+      console.error(error);
+    }
+    ctx.body = {};
   });
 
   // for every other route don't use verifyRequest middleware or use any other middleware you create
