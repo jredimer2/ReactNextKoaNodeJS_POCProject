@@ -17,6 +17,13 @@ class testForm extends Component {
         //
         // Please redirect to any page (eg., /test from here)
         //
+        // do your form validation here
+        if(!this.state.name) {
+            alert('Please fill your name');
+            return;
+        }
+        // redirect to a different page
+        window.location.href = '/test';
     }
 
     render() {
