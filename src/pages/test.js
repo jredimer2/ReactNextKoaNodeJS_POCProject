@@ -13,7 +13,7 @@ import React, { Component } from 'react';
 // import TestLabel from 'components/TestLabel'
 // import TestButton from 'components/TestButton'
 import TestComponent from 'components/TestComponent'
-import { ExampleContext } from '../contexts/ExampleContext';
+import { ExampleContext } from '../contexts/ExampleContext'; 
 
 class Test extends Component {
 

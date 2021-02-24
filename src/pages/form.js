@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Page, Card, Layout, Form, FormLayout, TextField, Button, ButtonGroup } from '@shopify/polaris';
 
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 //function createProfileComponent(props) {
 
 class testForm extends Component {
@@ -17,6 +21,7 @@ class testForm extends Component {
         //
         // Please redirect to any page (eg., /test from here)
         //
+        window.location.href = '/test'
     }
 
     render() {
