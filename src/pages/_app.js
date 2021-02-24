@@ -55,7 +55,8 @@ class MyApp extends App {
             forceRedirect = false;
         }
 
-        const shopifyProviderConfig = { apiKey: API_KEY, shopOrigin, token, from_login_page, forceRedirect: false };
+        
+        const shopifyProviderConfig = { apiKey: API_KEY, shopOrigin, token, from_login_page, forceRedirect: false, baseUrl: BASE_URL};
 
         let pageProps = {};
 
@@ -82,7 +83,7 @@ class MyApp extends App {
         const { Component, pageProps, shopifyProviderConfig } = this.props;
         const config = { ...shopifyProviderConfig };
 
-        console.log('>>>>>> _app.js  TP-4  render()')
+        console.log('>>>>>> _app.js  shopifyProviderConfig', shopifyProviderConfig)
 
         return (
             <ExampleContextProvider>
@@ -95,12 +96,12 @@ class MyApp extends App {
                     config.shopOrigin ?
                         <Provider config={config}>
                             <AppProvider i18n={translations}>                                
-                                <Component {...pageProps} />
+                            <Component {...pageProps} baseUrl={shopifyProviderConfig.baseUrl} />
                             </AppProvider>
                         </Provider>
                         :
                         <AppProvider i18n={translations}>
-                            <Component {...pageProps} />
+                            <Component {...pageProps} baseUrl={shopifyProviderConfig.baseUrl} />
                         </AppProvider>
 
                 }
